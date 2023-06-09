@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            WhatsApp Web Mention Everyone - Send every 250
+// @name            WhatsApp Web Mention Everyone - Send every 246
 // @namespace       AlejandroAkbal
 // @version         0.1.3
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
@@ -29,18 +29,24 @@ function sleep(ms) {
   let buffer = ''
 
   document.addEventListener('keyup', async (event) => {
-    buffer += event.key
+    if (event.key !== '@') {
+        return
+    }
+    const textBox = document.querySelector("[class='selectable-text copyable-text']")
+    if (!textBox) {
+        return
+    }
+    const textBoxText = textBox.textContent
 
-    // Keep the last 2 characters
-    buffer = buffer.slice(-2)
-
-    if (buffer === '@@') {
-      buffer = ''
+    const regex = /@(\d)*(!)?@$/g;
+    if (regex.test(textBoxText)) {
+      const spoiler = textBoxText.includes('!')
+      const sendEvery = parseInt(textBoxText.replace('@', '').replace('!', ''))
 
       // TODO: Delete the last 2 written characters (the "@@")
 
       try {
-        await tagEveryone()
+        await tagEveryone(spoiler, sendEvery)
       } catch (error) {
         alert(error.message)
         throw error
@@ -90,7 +96,7 @@ function sleep(ms) {
     return groupUsers.map((user) => user.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
   }
 
-  async function tagEveryone() {
+  async function tagEveryone(spoiler = false, sendEvery = 0) {
     const groupUsers = extractGroupUsers()
 
     let chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
@@ -99,11 +105,13 @@ function sleep(ms) {
       throw new Error('No chat input found. Please type a letter in the chat input.')
     }
 
-    // Add '\u200B' character 4000 times to emulate a spoiler behavior
-    const zeroWidthSpace = '\u200B'.repeat(4000)
-    document.execCommand('insertText', false, zeroWidthSpace)
-    document.execCommand('insertText', false, '@')
-    document.execCommand('insertText', false, '@')
+    if (spoiler) {
+        // Add '\u200B' character 4000 times to emulate a spoiler behavior
+        const zeroWidthSpace = '\u200B'.repeat(4000)
+        document.execCommand('insertText', false, zeroWidthSpace)
+        document.execCommand('insertText', false, '@')
+        document.execCommand('insertText', false, '@')
+    }
 
     let i = 0
     for (const user of groupUsers) {
@@ -128,19 +136,21 @@ function sleep(ms) {
 
       document.execCommand('insertText', false, ' ')
       i++
-      if (i%250 === 0) {
+      if (i%sendEvery === 0) {
           await sleep(300)
           const sendButton = document.querySelector("[data-testid='compose-btn-send']")
           sendButton.click()
           console.log("send button clicked")
           await sleep(300)
-          document.execCommand('insertText', false, `@@`)
+          // document.execCommand('insertText', false, `@@`)
           chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
-          // Add '\u200B' character 4000 times to emulate a spoiler behavior
-          const zeroWidthSpace = '\u200B'.repeat(4000)
-          document.execCommand('insertText', false, zeroWidthSpace)
-          document.execCommand('insertText', false, '@')
-          document.execCommand('insertText', false, '@')
+          if (spoiler) {
+              // Add '\u200B' character 4000 times to emulate a spoiler behavior
+              const zeroWidthSpace = '\u200B'.repeat(4000)
+              document.execCommand('insertText', false, zeroWidthSpace)
+              document.execCommand('insertText', false, '@')
+              document.execCommand('insertText', false, '@')
+          }
       }
     }
     await sleep(300)
