@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            WhatsApp Web Mention Everyone - Send every 246
+// @name            WhatsApp Web Mention Everyone - Send every 250
 // @namespace       AlejandroAkbal
 // @version         0.1.3
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
@@ -99,6 +99,12 @@ function sleep(ms) {
       throw new Error('No chat input found. Please type a letter in the chat input.')
     }
 
+    // Add '\u200B' character 4000 times to emulate a spoiler behavior
+    const zeroWidthSpace = '\u200B'.repeat(4000)
+    document.execCommand('insertText', false, zeroWidthSpace)
+    document.execCommand('insertText', false, '@')
+    document.execCommand('insertText', false, '@')
+
     let i = 0
     for (const user of groupUsers) {
 
@@ -130,6 +136,11 @@ function sleep(ms) {
           await sleep(300)
           document.execCommand('insertText', false, `@@`)
           chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
+          // Add '\u200B' character 4000 times to emulate a spoiler behavior
+          const zeroWidthSpace = '\u200B'.repeat(4000)
+          document.execCommand('insertText', false, zeroWidthSpace)
+          document.execCommand('insertText', false, '@')
+          document.execCommand('insertText', false, '@')
       }
     }
     await sleep(300)
