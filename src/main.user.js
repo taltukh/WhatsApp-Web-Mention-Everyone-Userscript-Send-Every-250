@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            WhatsApp Web Mention Everyone - Send every 246
+// @name            WhatsApp Web Mention Everyone - Send every x mentions, spoilter
 // @namespace       AlejandroAkbal
 // @version         0.1.3
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
