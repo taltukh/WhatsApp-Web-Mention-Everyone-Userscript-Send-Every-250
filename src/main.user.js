@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            WhatsApp Web Mention Everyone
+// @name            WhatsApp Web Mention Everyone - Send every 246
 // @namespace       AlejandroAkbal
 // @version         0.1.3
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
@@ -93,13 +93,15 @@ function sleep(ms) {
   async function tagEveryone() {
     const groupUsers = extractGroupUsers()
 
-    const chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
+    let chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
 
     if (!chatInput) {
       throw new Error('No chat input found. Please type a letter in the chat input.')
     }
 
+    let i = 0
     for (const user of groupUsers) {
+
       document.execCommand('insertText', false, `@${user}`)
 
       // await waitForElement("[data-testid='contact-mention-list-item']")
@@ -119,6 +121,21 @@ function sleep(ms) {
       chatInput.dispatchEvent(keyboardEvent)
 
       document.execCommand('insertText', false, ' ')
+      i++
+      if (i%250 === 0) {
+          await sleep(300)
+          const sendButton = document.querySelector("[data-testid='compose-btn-send']")
+          sendButton.click()
+          console.log("send button clicked")
+          await sleep(300)
+          document.execCommand('insertText', false, `@@`)
+          chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
+      }
     }
+    await sleep(300)
+    const sendButton = document.querySelector("[data-testid='compose-btn-send']")
+    sendButton.click()
+    console.log("send button clicked")
+    await sleep(300)
   }
 })()
