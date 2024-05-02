@@ -30,10 +30,11 @@ function sleep(ms) {
     if (event.key !== '@') {
         return
     }
-    const textBox = document.querySelector("[class='selectable-text copyable-text']")
-    if (!textBox) {
+    const textBoxes = document.querySelectorAll("[class='selectable-text copyable-text']")
+    if (!textBoxes.length) {
         return
     }
+    const textBox = textBoxes[textBoxes.length- 1]
     const textBoxText = textBox.textContent
 
     const regex = /@(!)?(\d)*(!)?@$/g;
@@ -43,14 +44,13 @@ function sleep(ms) {
 
       const chatInput = document.activeElement;
 
-      for (var j = 0; j< 10; j++) {
-        const enterKeyEvent = new KeyboardEvent("keydown", {
+      for (var j = 0; j< textBoxText.length; j++) {
+        await chatInput.dispatchEvent(new KeyboardEvent("keydown", {
           key: "Backspace",
           code: "Backspace",
           keyCode: 8,
           which: 8,
-        });
-        await chatInput.dispatchEvent(enterKeyEvent);
+        }));
       }
       await sleep(10)
 
@@ -101,17 +101,16 @@ function sleep(ms) {
       throw new Error('No chat input found. Please type a letter in the chat input.')
     }
 
-    if (spoiler) {
+    let i = 0
+    let justSent = true;
+    for (const user of groupUsers) {
+      if (spoiler && justSent) {
         // Add '\u200B' character 4000 times to emulate a spoiler behavior
         const zeroWidthSpace = '\u200B'.repeat(4000)
         document.execCommand('insertText', false, zeroWidthSpace)
         document.execCommand('insertText', false, '@')
         document.execCommand('insertText', false, '@')
-    }
-
-    let i = 0
-    let justSent;
-    for (const user of groupUsers) {
+      }
       justSent = false;
 
       document.execCommand('insertText', false, `@${user}`)
@@ -139,13 +138,6 @@ function sleep(ms) {
           sendButton.click()
           console.log("send button clicked")
           await sleep(300)
-          if (spoiler) {
-              // Add '\u200B' character 4000 times to emulate a spoiler behavior
-              const zeroWidthSpace = '\u200B'.repeat(4000)
-              document.execCommand('insertText', false, zeroWidthSpace)
-              document.execCommand('insertText', false, '@')
-              document.execCommand('insertText', false, '@')
-          }
           justSent = true;
       }
     }
