@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            WhatsApp Web Mention Everyone - Send every x mentions, spoilter
 // @namespace       AlejandroAkbal
-// @version         0.1.6
+// @version         0.1.7
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
 // @author          Alejandro Akbal - edit by Tal Tukh
 // @license         AGPL-3.0
