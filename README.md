@@ -15,5 +15,5 @@ This user script automates the process of mentioning everyone in a group chat.
 5. Type `@@` to mention everyone. `@!@` to mention everyone and use spoiler-type mentions. `@xxx@` to mention everyone and send every xxx mentions. `@xxx!@` to mention everyone and send every xxx mentions and use spoiler-type mentions.
 > :warning: **The message is being sent after mentions finish**: Be very careful here!
 
-> :warning: **The line with the `@@` is being deleted**: to avoid this, please go one line down before typing `@@` (Shift+Enter)
+> :warning: **The line with the `@@` is being deleted**: to avoid this, please go one line down (Shift+Enter) before typing `@@`
 6. Enjoy!
