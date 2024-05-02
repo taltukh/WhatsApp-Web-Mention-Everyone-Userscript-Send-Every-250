@@ -6,9 +6,9 @@
 // @author          Alejandro Akbal - edit by Tal Tukh
 // @license         AGPL-3.0
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=whatsapp.com
-// @homepage        https://github.com/AlejandroAkbal/WhatsApp-Web-Mention-Everyone-Userscript
-// @downloadURL     https://raw.githubusercontent.com/AlejandroAkbal/WhatsApp-Web-Mention-Everyone-Userscript/main/src/main.user.js
-// @updateURL       https://raw.githubusercontent.com/AlejandroAkbal/WhatsApp-Web-Mention-Everyone-Userscript/main/src/main.user.js
+// @homepage        https://github.com/taltukh/WhatsApp-Web-Mention-Everyone-Userscript-Send-Every-250
+// @downloadURL     https://raw.githubusercontent.com/taltukh/WhatsApp-Web-Mention-Everyone-Userscript-Send-Every-250/main/src/main.user.js
+// @updateURL       https://raw.githubusercontent.com/taltukh/WhatsApp-Web-Mention-Everyone-Userscript-Send-Every-250/main/src/main.user.js
 // @match           https://web.whatsapp.com/*
 // @grant           none
 // @run-at          document-idle
