@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            WhatsApp Web Mention Everyone - Send every x mentions, spoilter
 // @namespace       AlejandroAkbal
-// @version         0.1.3
+// @version         0.1.5
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
 // @author          Alejandro Akbal
 // @license         AGPL-3.0
@@ -55,7 +55,7 @@ function sleep(ms) {
   })
 
   function extractGroupUsers() {
-    const groupSubtitle = document.querySelector("[data-testid='chat-subtitle']")
+    const groupSubtitle = document.querySelector("#main > header span.selectable-text.copyable-text")
 
     if (!groupSubtitle) {
       throw new Error('No chat subtitle found. Please open a group chat.')
@@ -75,22 +75,8 @@ function sleep(ms) {
       )
     }
 
-    // Remove unnecessary text
-    groupUsers = groupUsers.filter(
-      (user) =>
-        [
-          'You', // English
-          '您', // Chinese
-          'あなた', // Japanese
-          'आप', // Hindi
-          'Tu', // Spanish
-          'Vous', // French
-          'Du', // German
-          'Jij', // Dutch
-          'Você', // Portuguese
-          'Вы' // Russian
-        ].includes(user) === false
-    )
+    // Remove last user (the user itself)
+    groupUsers.pop()
 
     // Normalize user's names without accents or special characters
     return groupUsers.map((user) => user.normalize('NFD').replace(/[\u0300-\u036f]/g, ''))
@@ -99,8 +85,9 @@ function sleep(ms) {
   async function tagEveryone(spoiler = false, sendEvery = 0) {
     const groupUsers = extractGroupUsers()
 
-    let chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
-
+    // Identify the current text box
+    let chatInput = document.activeElement;
+    
     if (!chatInput) {
       throw new Error('No chat input found. Please type a letter in the chat input.')
     }
@@ -118,8 +105,7 @@ function sleep(ms) {
 
       document.execCommand('insertText', false, `@${user}`)
 
-      // await waitForElement("[data-testid='contact-mention-list-item']")
-      await sleep(300)
+      await sleep(10)
 
       // Send "tab" key to autocomplete the user
       const keyboardEvent = new KeyboardEvent('keydown', {
