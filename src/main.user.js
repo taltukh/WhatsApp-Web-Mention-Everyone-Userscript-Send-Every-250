@@ -124,7 +124,7 @@ function sleep(ms) {
       i++
       if (i%sendEvery === 0) {
           await sleep(300)
-          const sendButton = document.querySelector("[data-testid='compose-btn-send']")
+          const sendButton = document.querySelector("[aria-label='Send']")
           sendButton.click()
           console.log("send button clicked")
           await sleep(300)
@@ -140,7 +140,7 @@ function sleep(ms) {
       }
     }
     await sleep(300)
-    const sendButton = document.querySelector("[data-testid='compose-btn-send']")
+    const sendButton = document.querySelector("[aria-label='Send']")
     sendButton.click()
     console.log("send button clicked")
     await sleep(300)
