@@ -3,7 +3,7 @@
 // @namespace       AlejandroAkbal
 // @version         0.1.5
 // @description     Automatically tag everyone in a group chat on WhatsApp Web
-// @author          Alejandro Akbal
+// @author          Alejandro Akbal - edit by Tal Tukh
 // @license         AGPL-3.0
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=whatsapp.com
 // @homepage        https://github.com/AlejandroAkbal/WhatsApp-Web-Mention-Everyone-Userscript
@@ -112,7 +112,9 @@ function sleep(ms) {
     }
 
     let i = 0
+    let justSent;
     for (const user of groupUsers) {
+      justSent = false;
 
       document.execCommand('insertText', false, `@${user}`)
 
@@ -139,8 +141,6 @@ function sleep(ms) {
           sendButton.click()
           console.log("send button clicked")
           await sleep(300)
-          // document.execCommand('insertText', false, `@@`)
-          chatInput = document.querySelector("[data-testid='conversation-compose-box-input'] > p")
           if (spoiler) {
               // Add '\u200B' character 4000 times to emulate a spoiler behavior
               const zeroWidthSpace = '\u200B'.repeat(4000)
@@ -148,12 +148,15 @@ function sleep(ms) {
               document.execCommand('insertText', false, '@')
               document.execCommand('insertText', false, '@')
           }
+          justSent = true;
       }
     }
-    await sleep(300)
-    const sendButton = document.querySelector("[aria-label='Send']")
-    sendButton.click()
-    console.log("send button clicked")
-    await sleep(300)
+    if (!justSent) {
+      await sleep(300)
+      const sendButton = document.querySelector("[aria-label='Send']")
+      sendButton.click()
+      console.log("send button clicked")
+      await sleep(300)
+    }
   }
 })()
