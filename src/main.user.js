@@ -26,8 +26,6 @@ function sleep(ms) {
 
   console.info('WhatsApp Web Mention Everyone loaded.')
 
-  let buffer = ''
-
   document.addEventListener('keyup', async (event) => {
     if (event.key !== '@') {
         return
@@ -38,7 +36,7 @@ function sleep(ms) {
     }
     const textBoxText = textBox.textContent
 
-    const regex = /@(\d)*(!)?@$/g;
+    const regex = /@(!)?(\d)*(!)?@$/g;
     if (regex.test(textBoxText)) {
       const spoiler = textBoxText.includes('!')
       const sendEvery = parseInt(textBoxText.replace('@', '').replace('!', ''))
