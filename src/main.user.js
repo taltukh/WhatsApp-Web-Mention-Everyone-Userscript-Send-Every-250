@@ -43,7 +43,18 @@ function sleep(ms) {
       const spoiler = textBoxText.includes('!')
       const sendEvery = parseInt(textBoxText.replace('@', '').replace('!', ''))
 
-      // TODO: Delete the last 2 written characters (the "@@")
+      const chatInput = document.activeElement;
+
+      for (var j = 0; j< 10; j++) {
+        const enterKeyEvent = new KeyboardEvent("keydown", {
+          key: "Backspace",
+          code: "Backspace",
+          keyCode: 8,
+          which: 8,
+        });
+        await chatInput.dispatchEvent(enterKeyEvent);
+      }
+      await sleep(10)
 
       try {
         await tagEveryone(spoiler, sendEvery)
@@ -87,7 +98,7 @@ function sleep(ms) {
 
     // Identify the current text box
     let chatInput = document.activeElement;
-    
+
     if (!chatInput) {
       throw new Error('No chat input found. Please type a letter in the chat input.')
     }
